@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, Send, CheckCircle2, Coffee } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Send, CheckCircle2, Coffee, User, Calendar, MapPin } from 'lucide-react'
 import Header from '../components/Header'
+import HeroSection from '../components/HeroSection'
 import GuestCountInput from '../components/GuestCountInput'
 import TimeSelector from '../components/TimeSelector'
 import MenuSection from '../components/MenuSection'
@@ -13,6 +14,7 @@ export default function CustomerPage() {
     const [searchParams] = useSearchParams()
     const roomIdFromUrl = searchParams.get('roomId')
     const isWalkIn = !!roomIdFromUrl
+    const bookingRef = useRef(null)
 
     // Form state
     const [step, setStep] = useState(0)
@@ -25,6 +27,12 @@ export default function CustomerPage() {
     const [submitting, setSubmitting] = useState(false)
     const [submitted, setSubmitted] = useState(false)
     const [roomName, setRoomName] = useState('')
+    const [specialRequests, setSpecialRequests] = useState('')
+
+    // Scroll to booking form
+    const scrollToBooking = () => {
+        bookingRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
 
     // Resolve walk-in room from URL
     useEffect(() => {
@@ -35,7 +43,6 @@ export default function CustomerPage() {
 
     const resolveRoom = async (roomSlug) => {
         try {
-            // Try to find room by slug (name lowercased with hyphens)
             const { data, error } = await supabase
                 .from('rooms')
                 .select('*')
@@ -46,7 +53,6 @@ export default function CustomerPage() {
                 setRoomName(data.name)
             }
         } catch (err) {
-            // Fallback: use the slug as display name
             setRoomName(roomSlug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()))
         }
     }
@@ -55,12 +61,11 @@ export default function CustomerPage() {
     const walkInSteps = ['info', 'menu', 'summary']
     const remoteSteps = ['info', 'datetime', 'menu', 'summary']
     const steps = isWalkIn ? walkInSteps : remoteSteps
-
     const currentStep = steps[step]
     const isLastStep = step === steps.length - 1
     const isFirstStep = step === 0
 
-    // Validation per step
+    // Validation
     const canProceed = () => {
         switch (currentStep) {
             case 'info':
@@ -68,7 +73,7 @@ export default function CustomerPage() {
             case 'datetime':
                 return date && time
             case 'menu':
-                return true // Optional to order food
+                return true
             case 'summary':
                 return true
             default:
@@ -79,16 +84,9 @@ export default function CustomerPage() {
     const handleSubmit = async () => {
         setSubmitting(true)
         try {
-            // Build start_time
-            let startTime
-            if (isWalkIn) {
-                startTime = new Date().toISOString()
-            } else {
-                startTime = new Date(`${date}T${time}:00`).toISOString()
-            }
-
-            // Find room UUID for walk-ins
+            let startTime = isWalkIn ? new Date().toISOString() : new Date(`${date}T${time}:00`).toISOString()
             let roomId = null
+
             if (isWalkIn && roomIdFromUrl) {
                 const { data: roomData } = await supabase
                     .from('rooms')
@@ -98,7 +96,6 @@ export default function CustomerPage() {
                 if (roomData) roomId = roomData.id
             }
 
-            // Insert reservation
             const { data: reservation, error: resError } = await supabase
                 .from('reservations')
                 .insert({
@@ -109,30 +106,25 @@ export default function CustomerPage() {
                     start_time: startTime,
                     status: isWalkIn ? ORDER_STATUS.CONFIRMED : ORDER_STATUS.PENDING,
                     order_type: isWalkIn ? ORDER_TYPE.QR_WALKIN : ORDER_TYPE.REMOTE,
+                    // special_requests: specialRequests // TODO: Add column to DB if needed
                 })
                 .select()
                 .single()
 
             if (resError) throw resError
 
-            // Insert order items
             if (cart.length > 0 && reservation) {
                 const items = cart.map((item) => ({
                     reservation_id: reservation.id,
                     menu_item_id: item.id,
                     quantity: item.quantity,
                 }))
-
-                const { error: itemsError } = await supabase
-                    .from('reservation_items')
-                    .insert(items)
-
-                if (itemsError) throw itemsError
+                await supabase.from('reservation_items').insert(items)
             }
 
             setSubmitted(true)
         } catch (err) {
-            console.error('Error submitting:', err)
+            console.error('Error:', err)
             // Still show success in demo mode
             setSubmitted(true)
         } finally {
@@ -140,44 +132,51 @@ export default function CustomerPage() {
         }
     }
 
-    // ── Success screen ──
     if (submitted) {
         return (
-            <div className="min-h-screen bg-dark-950">
-                <Header />
-                <div className="max-w-md mx-auto px-4 py-16 text-center animate-fade-in">
-                    <div className="w-20 h-20 mx-auto rounded-full bg-emerald-500/20 flex items-center justify-center mb-6">
-                        <CheckCircle2 className="w-10 h-10 text-emerald-400" />
+            <div className="min-h-screen bg-brand-cream bg-paper-texture">
+                <Header title="Confirmed" />
+                <div className="max-w-md mx-auto px-6 py-24 text-center animate-fade-in">
+                    <div className="w-24 h-24 mx-auto rounded-full bg-emerald-100 border-2 border-emerald-200 flex items-center justify-center mb-8 shadow-lg shadow-emerald-900/10">
+                        <CheckCircle2 className="w-12 h-12 text-emerald-600" />
                     </div>
-                    <h2 className="text-2xl font-display font-bold text-white mb-3">
-                        {isWalkIn ? LABELS.ORDER_SUBMITTED : LABELS.RESERVATION_SUBMITTED}
+                    <h2 className="text-3xl font-brand font-bold text-brand-brown mb-4">
+                        {isWalkIn ? "Pesanan Diterima!" : "Tempahan Berjaya!"}
                     </h2>
-                    <p className="text-dark-400 mb-8">
-                        {isWalkIn ? LABELS.ORDER_CONFIRMED : LABELS.RESERVATION_PENDING}
+                    <p className="text-brand-lightBrown mb-10 text-lg">
+                        {isWalkIn ? "Dapur sedang menyediakan pesanan anda." : "Kami akan mengesahkan tempahan anda melalui WhatsApp sebentar lagi."}
                     </p>
-                    <div className="glass-card p-4 text-left space-y-2">
-                        <p className="text-sm text-dark-400">
-                            {LABELS.CUSTOMER_NAME}: <span className="text-white font-medium">{customerName}</span>
-                        </p>
+
+                    <div className="paper-card p-6 text-left space-y-4">
+                        <div className="flex justify-between items-center border-b border-brand-brown/10 pb-4">
+                            <span className="text-brand-lightBrown font-sans font-medium uppercase tracking-wider text-xs">Pelanggan</span>
+                            <span className="text-brand-brown font-bold text-lg">{customerName}</span>
+                        </div>
                         {!isWalkIn && (
-                            <p className="text-sm text-dark-400">
-                                {LABELS.GUEST_COUNT}: <span className="text-white font-medium">{guestCount} orang</span>
-                            </p>
+                            <div className="flex justify-between items-center border-b border-brand-brown/10 pb-4">
+                                <span className="text-brand-lightBrown font-sans font-medium uppercase tracking-wider text-xs">Tetamu</span>
+                                <span className="text-brand-brown font-bold">{guestCount} pax</span>
+                            </div>
                         )}
-                        {cart.length > 0 && (
-                            <p className="text-sm text-dark-400">
-                                {LABELS.TOTAL}: <span className="text-white font-semibold">
-                                    RM {cart.reduce((s, c) => s + c.price * c.quantity, 0).toFixed(2)}
-                                </span>
-                            </p>
-                        )}
+                        <div className="flex justify-between items-center pt-2">
+                            <span className="text-brand-lightBrown font-sans font-medium uppercase tracking-wider text-xs">Jumlah</span>
+                            <span className="text-brand-red font-brand font-bold text-xl">
+                                RM {cart.reduce((s, c) => s + c.price * c.quantity, 0).toFixed(2)}
+                            </span>
+                        </div>
                     </div>
+
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="mt-10 btn-secondary w-full"
+                    >
+                        Kembali ke Utama
+                    </button>
                 </div>
             </div>
         )
     }
 
-    // ── Step titles ──
     const stepTitles = {
         info: LABELS.WELCOME,
         datetime: LABELS.PREFERRED_TIME,
@@ -186,141 +185,179 @@ export default function CustomerPage() {
     }
 
     return (
-        <div className="min-h-screen bg-dark-950">
+        <div className="min-h-screen bg-brand-cream bg-paper-texture">
             <Header />
 
-            <main className="max-w-md mx-auto px-4 py-6 pb-32">
-                {/* Progress bar */}
-                <div className="flex gap-1.5 mb-6">
-                    {steps.map((_, i) => (
-                        <div
-                            key={i}
-                            className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= step ? 'bg-brand-500' : 'bg-dark-800'
-                                }`}
-                        />
-                    ))}
-                </div>
+            {/* Show Hero only for remote reservations on first step */}
+            {!isWalkIn && step === 0 && (
+                <HeroSection onBookNow={scrollToBooking} />
+            )}
 
-                {/* Step title */}
-                <h2 className="text-xl font-display font-bold text-white mb-6 animate-fade-in">
-                    {stepTitles[currentStep]}
-                </h2>
+            <main ref={bookingRef} className={`max-w-xl mx-auto px-4 ${!isWalkIn && step === 0 ? 'py-16' : 'py-24'} pb-32`}>
 
-                {/* Walk-in badge */}
-                {isWalkIn && step === 0 && (
-                    <div className="badge-walkin mb-4 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm">
-                        <Coffee className="w-3.5 h-3.5" />
-                        QR Walk-in • {roomName}
-                    </div>
-                )}
+                {/* Booking Card */}
+                <div className="bg-white/50 backdrop-blur-md shadow-2xl shadow-brand-brown/10 border border-brand-brown/10 rounded-2xl overflow-hidden relative">
 
-                {/* ── Step content ── */}
-                <div className="animate-slide-up">
-                    {currentStep === 'info' && (
-                        <div className="space-y-4">
+                    {/* Decorative Top Border */}
+                    <div className="h-2 bg-brand-brown w-full" />
+
+                    <div className="p-6 md:p-8">
+                        {/* Progress Header */}
+                        <div className="flex justify-between items-end mb-8">
                             <div>
-                                <label className="block text-sm font-medium text-dark-300 mb-2">
-                                    {LABELS.CUSTOMER_NAME}
-                                </label>
-                                <input
-                                    type="text"
-                                    value={customerName}
-                                    onChange={(e) => setCustomerName(e.target.value)}
-                                    placeholder="Masukkan nama anda"
-                                    className="input-field"
-                                    autoFocus
-                                />
+                                <span className="text-xs font-bold tracking-[0.2em] text-brand-lightBrown uppercase">Langkah {step + 1} / {steps.length}</span>
+                                <h2 className="text-2xl md:text-3xl font-brand font-bold text-brand-brown mt-1">
+                                    {stepTitles[currentStep]}
+                                </h2>
                             </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-dark-300 mb-2">
-                                    {LABELS.WHATSAPP_NUMBER}
-                                </label>
-                                <input
-                                    type="tel"
-                                    value={whatsappNumber}
-                                    onChange={(e) => setWhatsappNumber(e.target.value)}
-                                    placeholder="012-3456789"
-                                    className="input-field"
-                                />
-                            </div>
-
-                            {!isWalkIn && (
-                                <div className="pt-2">
-                                    <GuestCountInput value={guestCount} onChange={setGuestCount} />
+                            {isWalkIn && (
+                                <div className="hidden md:flex badge-walkin items-center gap-1.5 px-3 py-1 text-xs">
+                                    <MapPin className="w-3 h-3" />
+                                    {roomName}
                                 </div>
                             )}
                         </div>
-                    )}
 
-                    {currentStep === 'datetime' && (
-                        <TimeSelector
-                            date={date}
-                            time={time}
-                            onDateChange={setDate}
-                            onTimeChange={setTime}
-                        />
-                    )}
+                        {/* Mobile Walkin Badge */}
+                        {isWalkIn && (
+                            <div className="md:hidden badge-walkin inline-flex items-center gap-1.5 px-3 py-1 text-xs mb-6">
+                                <MapPin className="w-3 h-3" />
+                                {roomName}
+                            </div>
+                        )}
 
-                    {currentStep === 'menu' && (
-                        <MenuSection cart={cart} setCart={setCart} />
-                    )}
+                        {/* Step Content */}
+                        <div className="animate-slide-up min-h-[300px]">
+                            {currentStep === 'info' && (
+                                <div className="space-y-6">
+                                    <div className="group">
+                                        <label className="block text-xs font-bold tracking-wider text-brand-lightBrown uppercase mb-2">
+                                            {LABELS.CUSTOMER_NAME}
+                                        </label>
+                                        <div className="relative">
+                                            <User className="absolute left-0 top-3 w-5 h-5 text-brand-brown/40" />
+                                            <input
+                                                type="text"
+                                                value={customerName}
+                                                onChange={(e) => setCustomerName(e.target.value)}
+                                                placeholder="Nama Penuh"
+                                                className="w-full bg-transparent border-b-2 border-brand-brown/20 pl-8 pr-4 py-2.5 text-brand-brown placeholder-brand-brown/30 focus:outline-none focus:border-brand-red transition-colors text-lg"
+                                                autoFocus
+                                            />
+                                        </div>
+                                    </div>
 
-                    {currentStep === 'summary' && (
-                        <OrderSummary
-                            customerName={customerName}
-                            whatsappNumber={whatsappNumber}
-                            guestCount={guestCount}
-                            date={date}
-                            time={time}
-                            cart={cart}
-                            orderType={isWalkIn ? ORDER_TYPE.QR_WALKIN : ORDER_TYPE.REMOTE}
-                            roomName={roomName}
-                        />
-                    )}
+                                    <div>
+                                        <label className="block text-xs font-bold tracking-wider text-brand-lightBrown uppercase mb-2">
+                                            {LABELS.WHATSAPP_NUMBER}
+                                        </label>
+                                        <div className="relative">
+                                            <span className="absolute left-0 top-3 text-brand-brown/40 text-lg">📞</span>
+                                            <input
+                                                type="tel"
+                                                value={whatsappNumber}
+                                                onChange={(e) => setWhatsappNumber(e.target.value)}
+                                                placeholder="012-3456789"
+                                                className="w-full bg-transparent border-b-2 border-brand-brown/20 pl-8 pr-4 py-2.5 text-brand-brown placeholder-brand-brown/30 focus:outline-none focus:border-brand-red transition-colors text-lg"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {!isWalkIn && (
+                                        <div className="pt-4">
+                                            <label className="block text-xs font-bold tracking-wider text-brand-lightBrown uppercase mb-4">
+                                                Bilangan Tetamu
+                                            </label>
+                                            <GuestCountInput value={guestCount} onChange={setGuestCount} />
+                                        </div>
+                                    )}
+
+                                    <div className="pt-4">
+                                        <label className="block text-xs font-bold tracking-wider text-brand-lightBrown uppercase mb-2">
+                                            Nota Tambahan (Optional)
+                                        </label>
+                                        <textarea
+                                            value={specialRequests}
+                                            onChange={(e) => setSpecialRequests(e.target.value)}
+                                            placeholder="Contoh: Tak nak pedas, alergic seafood..."
+                                            className="w-full bg-brand-brown/5 border border-brand-brown/10 rounded-lg p-3 text-brand-brown placeholder-brand-brown/30 focus:outline-none focus:border-brand-red/50 focus:bg-white transition-all text-sm min-h-[80px]"
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            {currentStep === 'datetime' && (
+                                <TimeSelector
+                                    date={date}
+                                    time={time}
+                                    onDateChange={setDate}
+                                    onTimeChange={setTime}
+                                />
+                            )}
+
+                            {currentStep === 'menu' && (
+                                <MenuSection cart={cart} setCart={setCart} />
+                            )}
+
+                            {currentStep === 'summary' && (
+                                <OrderSummary
+                                    customerName={customerName}
+                                    whatsappNumber={whatsappNumber}
+                                    guestCount={guestCount}
+                                    date={date}
+                                    time={time}
+                                    cart={cart}
+                                    orderType={isWalkIn ? ORDER_TYPE.QR_WALKIN : ORDER_TYPE.REMOTE}
+                                    roomName={roomName}
+                                    specialRequests={specialRequests}
+                                />
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Bottom Actions Bar */}
+                    <div className="bg-brand-brown/5 p-4 md:p-6 border-t border-brand-brown/10 flex justify-between gap-4">
+                        {!isFirstStep && (
+                            <button
+                                onClick={() => setStep((s) => s - 1)}
+                                className="px-6 py-3 rounded-lg text-brand-brown font-bold tracking-wide hover:bg-brand-brown/5 transition-colors flex items-center gap-2"
+                            >
+                                <ArrowLeft className="w-4 h-4" />
+                                <span className="hidden md:inline">{LABELS.BACK}</span>
+                            </button>
+                        )}
+
+                        <div className="flex-1 flex justify-end">
+                            {isLastStep ? (
+                                <button
+                                    onClick={handleSubmit}
+                                    disabled={submitting}
+                                    className="btn-primary w-full md:w-auto flex items-center justify-center gap-2 min-w-[200px]"
+                                >
+                                    {submitting ? (
+                                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                    ) : (
+                                        <>
+                                            {LABELS.SUBMIT}
+                                            <Send className="w-4 h-4 ml-1" />
+                                        </>
+                                    )}
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => setStep((s) => s + 1)}
+                                    disabled={!canProceed()}
+                                    className="btn-primary w-full md:w-auto flex items-center justify-center gap-2 min-w-[160px]"
+                                >
+                                    {LABELS.NEXT}
+                                    <ArrowRight className="w-4 h-4 ml-1" />
+                                </button>
+                            )}
+                        </div>
+                    </div>
+
                 </div>
             </main>
-
-            {/* Bottom navigation */}
-            <div className="fixed bottom-0 left-0 right-0 bg-dark-950/90 backdrop-blur-lg border-t border-dark-800 p-4">
-                <div className="max-w-md mx-auto flex gap-3">
-                    {!isFirstStep && (
-                        <button
-                            onClick={() => setStep((s) => s - 1)}
-                            className="btn-secondary flex items-center gap-2"
-                        >
-                            <ArrowLeft className="w-4 h-4" />
-                            {LABELS.BACK}
-                        </button>
-                    )}
-
-                    {isLastStep ? (
-                        <button
-                            onClick={handleSubmit}
-                            disabled={submitting}
-                            className="btn-primary flex-1 flex items-center justify-center gap-2"
-                        >
-                            {submitting ? (
-                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                            ) : (
-                                <>
-                                    <Send className="w-4 h-4" />
-                                    {LABELS.SUBMIT}
-                                </>
-                            )}
-                        </button>
-                    ) : (
-                        <button
-                            onClick={() => setStep((s) => s + 1)}
-                            disabled={!canProceed()}
-                            className="btn-primary flex-1 flex items-center justify-center gap-2"
-                        >
-                            {LABELS.NEXT}
-                            <ArrowRight className="w-4 h-4" />
-                        </button>
-                    )}
-                </div>
-            </div>
         </div>
     )
 }

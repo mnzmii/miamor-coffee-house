@@ -11,29 +11,27 @@ export default function GuestCountInput({ value, onChange, max = 15 }) {
     }
 
     return (
-        <div className="space-y-3">
-            <label className="flex items-center gap-2 text-sm font-medium text-dark-300">
-                <Users className="w-4 h-4 text-brand-400" />
-                {LABELS.GUEST_COUNT}
-            </label>
-            <div className="flex items-center justify-center gap-4">
+        <div className="space-y-4">
+            <div className="flex items-center justify-between border-2 border-brand-brown/10 rounded-2xl p-2 bg-brand-brown/5 group-focus-within:border-brand-brown/30 transition-all duration-300">
                 <button
                     type="button"
                     onClick={decrease}
                     disabled={value <= 1}
-                    className="w-12 h-12 rounded-xl bg-dark-800 border border-dark-700 flex items-center justify-center text-dark-300 hover:bg-dark-700 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed active:scale-90"
+                    className="w-14 h-14 rounded-xl bg-white shadow-sm flex items-center justify-center text-brand-brown disabled:opacity-30 disabled:cursor-not-allowed hover:bg-brand-brown hover:text-white active:scale-95 transition-all duration-300 border border-brand-brown/5"
                 >
                     <Minus className="w-5 h-5" />
                 </button>
-                <div className="w-20 text-center">
-                    <span className="text-4xl font-display font-bold text-white">{value}</span>
-                    <p className="text-xs text-dark-500 mt-1">orang</p>
+
+                <div className="text-center px-4">
+                    <span className="block text-4xl font-brand font-bold text-brand-brown leading-none">{value}</span>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-lightBrown mt-2 block">Bilangan Tetamu</span>
                 </div>
+
                 <button
                     type="button"
                     onClick={increase}
                     disabled={value >= max}
-                    className="w-12 h-12 rounded-xl bg-dark-800 border border-dark-700 flex items-center justify-center text-dark-300 hover:bg-dark-700 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed active:scale-90"
+                    className="w-14 h-14 rounded-xl bg-white shadow-sm flex items-center justify-center text-brand-brown disabled:opacity-30 disabled:cursor-not-allowed hover:bg-brand-brown hover:text-white active:scale-95 transition-all duration-300 border border-brand-brown/5"
                 >
                     <Plus className="w-5 h-5" />
                 </button>

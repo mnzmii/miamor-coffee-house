@@ -24,6 +24,6 @@ const statusConfig = {
 }
 
 export default function StatusBadge({ type }) {
-    const config = statusConfig[type] || { label: type, className: 'badge' }
-    return <span className={config.className}>{config.label}</span>
+    const config = statusConfig[type] || { label: type, className: '' }
+    return <span className={`badge ${config.className}`}>{config.label}</span>
 }

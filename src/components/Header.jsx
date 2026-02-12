@@ -1,55 +1,128 @@
-import { Link, useLocation } from 'react-router-dom'
-import { Coffee, ChefHat, LayoutDashboard } from 'lucide-react'
-import { LABELS } from '../lib/constants'
+import { useState, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Coffee, Menu, X } from 'lucide-react'
 
-export default function Header({ title }) {
+export default function Header() {
     const location = useLocation()
-    const isStaff = location.pathname.startsWith('/staff')
-    const isKitchen = location.pathname === '/kitchen'
+    const navigate = useNavigate()
+    const [isScrolled, setIsScrolled] = useState(false)
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+    useEffect(() => {
+        const handleScroll = () => setIsScrolled(window.scrollY > 20)
+        window.addEventListener('scroll', handleScroll)
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
+
+    const navLinks = [
+        { name: 'Utama', path: '/' },
+        { name: 'Menu', path: '/menu' },
+    ]
 
     return (
-        <header className="sticky top-0 z-50 bg-dark-950/80 backdrop-blur-lg border-b border-dark-800">
-            <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-500/20">
-                        <Coffee className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                        <h1 className="font-display font-bold text-lg text-white leading-tight">
-                            {LABELS.APP_NAME}
-                        </h1>
-                        {title && (
-                            <p className="text-xs text-dark-400 font-medium">{title}</p>
-                        )}
-                    </div>
-                </div>
+        <header
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
+                ? 'bg-brand-brown/95 backdrop-blur-md shadow-lg py-3'
+                : 'bg-transparent py-5'
+                }`}
+        >
+            <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
 
-                {/* Navigation for staff/kitchen */}
-                {(isStaff || isKitchen) && (
-                    <nav className="flex items-center gap-2">
+                {/* Logo */}
+                <Link to="/" className="flex items-center gap-3 group">
+                    <div className={`p-2 rounded-full transition-all duration-300 ${isScrolled ? 'bg-white/10' : 'bg-brand-brown/80'}`}>
+                        <Coffee className="w-6 h-6 text-brand-beige" />
+                    </div>
+                    <div className="flex flex-col">
+                        <h1 className={`font-brand font-bold text-xl tracking-[0.15em] transition-colors ${isScrolled ? 'text-white' : 'text-brand-brown'} group-hover:text-brand-red`}>
+                            MIAMOR
+                        </h1>
+                        <span className={`text-[10px] uppercase tracking-[0.2em] font-bold ${isScrolled ? 'text-brand-beige' : 'text-brand-lightBrown'}`}>
+                            Coffee House
+                        </span>
+                    </div>
+                </Link>
+
+                {/* Desktop Nav */}
+                <nav className="hidden md:flex items-center gap-8">
+                    {navLinks.map((link) => (
                         <Link
-                            to="/staff"
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/staff'
-                                    ? 'bg-brand-500/20 text-brand-400'
-                                    : 'text-dark-400 hover:text-dark-200 hover:bg-dark-800'
+                            key={link.path}
+                            to={link.path}
+                            className={`font-semibold text-sm uppercase tracking-wider hover:text-brand-red transition-colors relative group
+                ${location.pathname === link.path
+                                    ? 'text-brand-red'
+                                    : isScrolled ? 'text-white' : 'text-brand-brown'
                                 }`}
                         >
-                            <LayoutDashboard className="w-4 h-4" />
-                            <span className="hidden sm:inline">{LABELS.STAFF_DASHBOARD}</span>
+                            {link.name}
+                            <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-red transition-all duration-300 group-hover:w-full ${location.pathname === link.path ? 'w-full' : ''}`} />
                         </Link>
-                        <Link
-                            to="/kitchen"
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/kitchen'
-                                    ? 'bg-brand-500/20 text-brand-400'
-                                    : 'text-dark-400 hover:text-dark-200 hover:bg-dark-800'
-                                }`}
-                        >
-                            <ChefHat className="w-4 h-4" />
-                            <span className="hidden sm:inline">{LABELS.KITCHEN_BOARD}</span>
-                        </Link>
-                    </nav>
-                )}
+                    ))}
+
+                    {/* Staff link */}
+                    <Link
+                        to="/staff/login"
+                        className={`font-semibold text-sm uppercase tracking-wider hover:text-brand-red transition-colors relative group
+                            ${location.pathname.startsWith('/staff')
+                                ? 'text-brand-red'
+                                : isScrolled ? 'text-white/60 hover:text-white' : 'text-brand-brown/50 hover:text-brand-brown'
+                            }`}
+                    >
+                        Kakitangan
+                        <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-red transition-all duration-300 group-hover:w-full ${location.pathname.startsWith('/staff') ? 'w-full' : ''}`} />
+                    </Link>
+
+                    <button
+                        onClick={() => navigate('/book')}
+                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 ${location.pathname === '/book'
+                            ? 'bg-brand-red text-white'
+                            : 'bg-brand-brown text-white hover:bg-brand-lightBrown'
+                            }`}
+                    >
+                        Tempah Meja
+                    </button>
+                </nav>
+
+                {/* Mobile Menu Button */}
+                <button
+                    className="md:hidden p-2"
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                    aria-label="Toggle menu"
+                >
+                    {mobileMenuOpen ? <X className={isScrolled ? 'text-white' : 'text-brand-brown'} /> : <Menu className={isScrolled ? 'text-white' : 'text-brand-brown'} />}
+                </button>
             </div>
+
+            {/* Mobile Menu Overlay */}
+            {mobileMenuOpen && (
+                <div className="md:hidden absolute top-full left-0 right-0 bg-brand-brown shadow-xl border-t border-white/10 p-6 flex flex-col gap-4 animate-slide-up">
+                    {navLinks.map((link) => (
+                        <Link
+                            key={link.path}
+                            to={link.path}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className={`text-lg font-brand font-bold tracking-wide ${location.pathname === link.path ? 'text-brand-red' : 'text-brand-beige'
+                                }`}
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                    <Link
+                        to="/staff/login"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="text-lg font-brand font-bold tracking-wide text-brand-beige/50"
+                    >
+                        Kakitangan
+                    </Link>
+                    <button
+                        onClick={() => { setMobileMenuOpen(false); navigate('/book') }}
+                        className="mt-2 bg-brand-red text-white px-6 py-3 rounded-full font-bold text-sm tracking-wide"
+                    >
+                        Tempah Meja
+                    </button>
+                </div>
+            )}
         </header>
     )
 }

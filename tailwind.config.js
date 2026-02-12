@@ -8,40 +8,42 @@ export default {
         extend: {
             colors: {
                 brand: {
-                    50: '#fdf4f0',
-                    100: '#fbe5db',
-                    200: '#f7c9b5',
-                    300: '#f2a888',
-                    400: '#ec8054',
-                    500: '#e6602e',
-                    600: '#d44a1e',
-                    700: '#b03819',
-                    800: '#8d2f19',
-                    900: '#732a18',
+                    brown: '#3E2723',    // Primary: Dark brown
+                    lightBrown: '#5D4037',
+                    beige: '#D7CCC8',
+                    cream: '#F5F5DC',    // Secondary: Cream/Latte
+                    red: '#C62828',      // Accent: Deep red
+                    darkRed: '#8E0000',
+                    hoverRed: '#B71C1C',
                 },
                 dark: {
-                    50: '#f6f6f7',
-                    100: '#e2e3e5',
-                    200: '#c4c6cb',
-                    300: '#9fa2a9',
-                    400: '#7b7f88',
-                    500: '#61656e',
-                    600: '#4c4f57',
-                    700: '#3e4147',
-                    800: '#2a2c31',
-                    900: '#1a1b1f',
-                    950: '#111215',
+                    50: '#fcfbf9',
+                    100: '#f5f2ed',
+                    200: '#e8dfd5',
+                    300: '#d7c4b3',
+                    400: '#c2a38c',
+                    500: '#a67c52', // Coffee color
+                    600: '#8c6239',
+                    700: '#3e2723', // Brand brown
+                    800: '#2d1b18',
+                    900: '#1a100e',
+                    950: '#0f0807',
                 }
             },
             fontFamily: {
-                sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-                display: ['Outfit', 'Inter', 'sans-serif'],
+                sans: ['Inter', 'system-ui', 'sans-serif'],
+                body: ['Cormorant Garamond', 'Georgia', 'serif'],
+                serif: ['DM Serif Display', 'Georgia', 'serif'],
+                display: ['DM Serif Display', 'serif'],
+                brand: ['Playfair Display', 'Georgia', 'serif'],
+            },
+            backgroundImage: {
+                'coffee-pattern': "url('https://www.transparenttextures.com/patterns/black-linen.png')",
+                'paper-texture': "url('https://www.transparenttextures.com/patterns/cream-paper.png')",
             },
             animation: {
-                'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                'fade-in': 'fadeIn 0.3s ease-out',
-                'slide-up': 'slideUp 0.3s ease-out',
-                'slide-down': 'slideDown 0.3s ease-out',
+                'fade-in': 'fadeIn 0.5s ease-out',
+                'slide-up': 'slideUp 0.5s ease-out',
             },
             keyframes: {
                 fadeIn: {
@@ -49,11 +51,7 @@ export default {
                     '100%': { opacity: '1' },
                 },
                 slideUp: {
-                    '0%': { opacity: '0', transform: 'translateY(10px)' },
-                    '100%': { opacity: '1', transform: 'translateY(0)' },
-                },
-                slideDown: {
-                    '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                    '0%': { opacity: '0', transform: 'translateY(20px)' },
                     '100%': { opacity: '1', transform: 'translateY(0)' },
                 },
             },
