@@ -109,6 +109,7 @@ export default function MenuHighlights() {
         if (isAnimating || i === active) return
         setPage(0)
         setActive(i)
+        tabsRef.current[i]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
         animate('fade')
     }
 
@@ -134,8 +135,8 @@ export default function MenuHighlights() {
     return (
         <div className="w-full">
             {/* Category Tabs */}
-            <div className="flex justify-center mb-10">
-                <div className="relative inline-flex gap-1 p-1.5 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 overflow-x-auto no-scrollbar">
+            <div className="flex justify-center mb-10 px-5 md:px-0">
+                <div className="relative inline-flex gap-1 p-1.5 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 overflow-x-auto no-scrollbar max-w-full max-md:[mask-image:linear-gradient(to_right,transparent,black_24px,black_calc(100%-24px),transparent)]">
                     <span
                         className="absolute top-1.5 bottom-1.5 bg-white rounded-full transition-all duration-500 ease-out z-0"
                         style={{ left: `${pillStyle.left}px`, width: `${pillStyle.width}px` }}
@@ -145,7 +146,7 @@ export default function MenuHighlights() {
                             key={cat.name}
                             ref={(el) => (tabsRef.current[i] = el)}
                             onClick={() => switchCategory(i)}
-                            className={`relative px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-colors duration-300 z-10 ${
+                            className={`relative px-4 md:px-5 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-semibold whitespace-nowrap transition-colors duration-300 z-10 ${
                                 i === active ? 'text-brand-brown' : 'text-brand-beige/60 hover:text-brand-beige'
                             }`}
                         >

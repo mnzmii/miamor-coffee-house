@@ -71,7 +71,7 @@ export default function LandingPage() {
                         <img
                             src="/miamor.png"
                             alt="Miamor Coffee"
-                            className="rounded-2xl shadow-2xl shadow-brand-brown/20 w-full h-60 md:h-[450px] object-cover"
+                            className="rounded-2xl shadow-2xl shadow-brand-brown/20 w-full h-80 md:h-[450px] object-cover"
                         />
                     </div>
                     <div className="space-y-4 md:space-y-6">
@@ -79,7 +79,7 @@ export default function LandingPage() {
                             <div className="h-[2px] w-8 md:w-12 bg-brand-red rounded-full"></div>
                             <span className="text-brand-red font-bold text-sm md:text-base uppercase tracking-[0.2em]">Why Miamor Coffee House?</span>
                         </div>
-                        <h2 className="text-3xl md:text-5xl font-heading font-semibold text-brand-brown leading-tight">
+                        <h2 className="text-4xl md:text-5xl font-heading font-semibold text-brand-brown leading-tight">
                             <span className="block">Your Own Room,</span>
                             <span className="block text-right">Your Own People</span>
                         </h2>
@@ -105,7 +105,11 @@ export default function LandingPage() {
             <section id="rooms" className="py-14 md:py-28 bg-white">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-10 md:mb-16 px-5">
-                        <span className="text-brand-red font-bold text-xs uppercase tracking-[0.2em]">Our Spaces</span>
+                        <div className="flex items-center justify-center gap-4">
+                            <div className="h-[2px] w-8 bg-brand-red rounded-full"></div>
+                            <span className="text-brand-red font-bold text-xs uppercase tracking-[0.2em]">Our Spaces</span>
+                            <div className="h-[2px] w-8 bg-brand-red rounded-full"></div>
+                        </div>
                         <h2 className="text-3xl md:text-5xl font-heading font-semibold text-brand-brown mt-2 md:mt-3">Our Spaces</h2>
                         <p className="text-brand-lightBrown mt-3 md:mt-4 max-w-lg mx-auto text-sm md:text-base">
                             Pick a space that fits your plan, from private rooms to our open area.
@@ -128,6 +132,7 @@ export default function LandingPage() {
                         <div className="flex items-center justify-center gap-4">
                             <div className="h-[2px] w-8 bg-brand-red rounded-full"></div>
                             <span className="text-brand-red font-bold text-xs uppercase tracking-[0.2em]">Our Menu</span>
+                            <div className="h-[2px] w-8 bg-brand-red rounded-full"></div>
                         </div>
                         <h2 className="text-4xl md:text-6xl font-heading font-semibold text-white mt-3 md:mt-4">Explore the Menu</h2>
                         <p className="text-brand-beige/70 mt-3 md:mt-4 text-sm md:text-base max-w-xl mx-auto">
@@ -156,7 +161,11 @@ export default function LandingPage() {
             <section className="py-14 md:py-28 bg-white">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-10 md:mb-16 px-5">
-                        <span className="text-brand-red font-bold text-xs uppercase tracking-[0.2em]">Reviews</span>
+                        <div className="flex items-center justify-center gap-4">
+                            <div className="h-[2px] w-8 bg-brand-red rounded-full"></div>
+                            <span className="text-brand-red font-bold text-xs uppercase tracking-[0.2em]">Reviews</span>
+                            <div className="h-[2px] w-8 bg-brand-red rounded-full"></div>
+                        </div>
                         <h2 className="text-3xl md:text-5xl font-heading font-semibold text-brand-brown mt-2 md:mt-3">What Guests Say</h2>
                         <p className="text-brand-lightBrown mt-3 text-sm md:text-base max-w-lg mx-auto">
                             Hear from those who've enjoyed the Miamor experience.
@@ -212,7 +221,11 @@ export default function LandingPage() {
             <section id="find-us" className="py-14 md:py-20 bg-brand-cream">
                 <div className="max-w-6xl mx-auto px-5 md:px-6">
                     <div className="text-center mb-10 md:mb-14">
-                        <span className="text-brand-red font-bold text-xs uppercase tracking-[0.2em]">About Us</span>
+                        <div className="flex items-center justify-center gap-4">
+                            <div className="h-[2px] w-8 bg-brand-red rounded-full"></div>
+                            <span className="text-brand-red font-bold text-xs uppercase tracking-[0.2em]">About Us</span>
+                            <div className="h-[2px] w-8 bg-brand-red rounded-full"></div>
+                        </div>
                         <h2 className="text-3xl md:text-5xl font-heading font-semibold text-brand-brown mt-2 md:mt-3">Find Us</h2>
                     </div>
 
