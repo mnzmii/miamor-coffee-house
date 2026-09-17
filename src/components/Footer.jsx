@@ -1,125 +1,96 @@
-import { Link } from 'react-router-dom'
-import { Coffee, MapPin, Clock, Phone, Instagram, Facebook, Music2 } from 'lucide-react'
+import { MapPin, Clock, Phone, Instagram, Facebook, Music2 } from 'lucide-react'
+import { MENU_PDF_URL } from '../lib/constants'
+
+const LOGO_URL = '/miamor_logo.jpg'
 
 export default function Footer() {
     return (
         <footer className="bg-brand-brown text-brand-beige relative overflow-hidden">
-            {/* Decorative top edge */}
             <div className="h-1 bg-gradient-to-r from-brand-red via-brand-red/50 to-brand-red" />
 
-            <div className="max-w-7xl mx-auto px-6 py-16">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div className="max-w-7xl mx-auto px-5 md:px-6 py-12 md:py-16">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12">
 
-                    {/* Brand column */}
-                    <div className="lg:col-span-1">
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="p-2 bg-white/10 rounded-full">
-                                <Coffee className="w-6 h-6 text-brand-red" />
+                    <div>
+                        <div className="flex items-center gap-3 mb-5">
+                            <div className="w-14 h-14 rounded-full overflow-hidden flex-shrink-0">
+                                <img src={LOGO_URL} alt="Miamor Coffee House logo" className="w-full h-full object-cover" />
                             </div>
-                            <div>
-                                <h3 className="font-brand font-bold text-xl tracking-[0.15em] text-white">MIAMOR</h3>
-                                <span className="text-[10px] uppercase tracking-[0.2em] text-brand-beige/60 font-bold">Coffee House</span>
-                            </div>
+                            <span className="font-logo font-bold flex flex-col tracking-tight leading-none justify-center">
+                                <span className="text-3xl text-brand-red">MIAMOR</span>
+                                <span className="text-sm mt-0.5 text-white">COFFEE HOUSE</span>
+                            </span>
                         </div>
                         <p className="text-brand-beige/70 text-sm leading-relaxed">
-                            Ruang selesa untuk menikmati kopi premium yang diseduh penuh kasih sayang. Rasai The Original Taste bersama kami.
+                            A cozy space to enjoy premium coffee brewed with love.
                         </p>
                     </div>
 
-                    {/* Quick Links */}
                     <div>
-                        <h4 className="font-brand font-bold text-white uppercase tracking-wider text-sm mb-6">Pautan Pantas</h4>
-                        <ul className="space-y-3">
-                            {[
-                                { name: 'Utama', path: '/' },
-                                { name: 'Menu', path: '/menu' },
-                                { name: 'Tempah Meja', path: '/book' },
-                            ].map(link => (
-                                <li key={link.path}>
-                                    <Link to={link.path} className="text-brand-beige/60 hover:text-white transition-colors text-sm font-medium">
-                                        {link.name}
-                                    </Link>
-                                </li>
-                            ))}
+                        <h4 className="font-heading font-semibold text-white uppercase tracking-wider text-sm mb-5">Quick Links</h4>
+                        <ul className="space-y-3 text-sm font-medium">
+                            <li><a href="#hero" className="text-brand-beige/60 hover:text-white transition-colors">Home</a></li>
+                            <li><a href="#rooms" className="text-brand-beige/60 hover:text-white transition-colors">Rooms</a></li>
+                            <li><a href="#menu" className="text-brand-beige/60 hover:text-white transition-colors">Menu</a></li>
+                            <li><a href="#booking" className="text-brand-beige/60 hover:text-white transition-colors">Book a Table</a></li>
+                            <li><a href={MENU_PDF_URL} target="_blank" rel="noopener noreferrer" className="text-brand-beige/60 hover:text-white transition-colors">Menu (PDF)</a></li>
                         </ul>
                     </div>
 
-                    {/* Operating Hours */}
                     <div>
-                        <h4 className="font-brand font-bold text-white uppercase tracking-wider text-sm mb-6">Waktu Operasi</h4>
+                        <h4 className="font-heading font-semibold text-white uppercase tracking-wider text-sm mb-5">Opening Hours</h4>
                         <ul className="space-y-3 text-sm">
                             <li className="flex items-start gap-3">
                                 <Clock className="w-4 h-4 text-brand-red mt-0.5 flex-shrink-0" />
                                 <div>
-                                    <p className="text-white font-medium">Isnin – Sabtu</p>
+                                    <p className="text-white font-medium">Monday – Saturday</p>
                                     <p className="text-brand-beige/60">10:30 AM – 6:30 PM</p>
                                 </div>
                             </li>
                             <li className="flex items-start gap-3 opacity-50">
                                 <Clock className="w-4 h-4 text-brand-beige/20 mt-0.5 flex-shrink-0" />
                                 <div>
-                                    <p className="text-brand-beige/40 font-medium">Ahad</p>
-                                    <p className="text-brand-beige/30 italic whitespace-nowrap">Tutup (Closed)</p>
+                                    <p className="text-brand-beige/40 font-medium">Sunday</p>
+                                    <p className="text-brand-beige/30 italic">Closed</p>
                                 </div>
                             </li>
                         </ul>
                     </div>
 
-                    {/* Contact */}
                     <div>
-                        <h4 className="font-brand font-brand font-bold text-white uppercase tracking-wider text-sm mb-6">Hubungi Kami</h4>
+                        <h4 className="font-heading font-semibold text-white uppercase tracking-wider text-sm mb-5">Contact</h4>
                         <ul className="space-y-3 text-sm">
                             <li className="flex items-start gap-3">
                                 <MapPin className="w-4 h-4 text-brand-red mt-0.5 flex-shrink-0" />
                                 <span className="text-brand-beige/60 leading-relaxed">
-                                    Tingkat 1, 60-7, Jalan Sulaiman, Taman Sri Maharani, 84000 Muar, Johor
+                                    1st Floor, 60-7, Jalan Sulaiman, Taman Sri Maharani, 84000 Muar, Johor
                                 </span>
                             </li>
                             <li className="flex items-center gap-3">
                                 <Phone className="w-4 h-4 text-brand-red flex-shrink-0" />
-                                <span className="text-brand-beige/60">017-740-2975</span>
+                                <a href="tel:0177402975" className="text-brand-beige/60 hover:text-white transition-colors">017-740-2975</a>
                             </li>
                         </ul>
-                        <div className="flex gap-3 mt-6">
-                            <a
-                                href="https://www.instagram.com/miamorcoffeemy?igsh=MWtqODgwM2lycWVwZg=="
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition-colors"
-                                aria-label="Instagram"
-                            >
-                                <Instagram className="w-4 h-4 text-white" />
+
+                        <div className="flex gap-3 mt-5">
+                            <a href="https://www.instagram.com/miamorcoffeemy?igsh=MWtqODgwM2lycWVwZg==" target="_blank" rel="noopener noreferrer"
+                                className="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition-colors active:scale-90" aria-label="Instagram">
+                                <Instagram className="w-5 h-5 text-white" />
                             </a>
-                            <a
-                                href="https://www.facebook.com/share/1CL9ZBoKcC/?mibextid=wwXIfr"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition-colors"
-                                aria-label="Facebook"
-                            >
-                                <Facebook className="w-4 h-4 text-white" />
+                            <a href="https://www.facebook.com/share/1CL9ZBoKcC/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer"
+                                className="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition-colors active:scale-90" aria-label="Facebook">
+                                <Facebook className="w-5 h-5 text-white" />
                             </a>
-                            <a
-                                href="https://www.tiktok.com/@miamorcoffee1?_r=1&_t=ZS-93riGkzyrCe"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition-colors"
-                                aria-label="TikTok"
-                            >
-                                <Music2 className="w-4 h-4 text-white" />
+                            <a href="https://www.tiktok.com/@miamorcoffee1?_r=1&_t=ZS-93riGkzyrCe" target="_blank" rel="noopener noreferrer"
+                                className="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition-colors active:scale-90" aria-label="TikTok">
+                                <Music2 className="w-5 h-5 text-white" />
                             </a>
                         </div>
                     </div>
                 </div>
 
-                {/* Bottom bar */}
-                <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-                    <p className="text-brand-beige/40 text-xs">
-                        © 2024 Miamor Coffee House. Hak cipta terpelihara.
-                    </p>
-                    <p className="text-brand-beige/30 text-xs">
-                        Dibuat dengan ☕ dan ❤️
-                    </p>
+                <div className="mt-12 md:mt-16 pt-6 md:pt-8 border-t border-white/10 text-center">
+                    <p className="text-brand-beige/40 text-xs">© 2024 Miamor Coffee House. All rights reserved.</p>
                 </div>
             </div>
         </footer>

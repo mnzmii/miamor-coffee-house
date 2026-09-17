@@ -1,5 +1,5 @@
 {
-  "name": "miamor-reservation-system",
+  "name": "miamor-coffee-house",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -9,12 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.45.0",
     "lucide-react": "^0.460.0",
-    "qrcode": "^1.5.4",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.0"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",

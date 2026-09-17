@@ -11,16 +11,23 @@
   --color-text: #3E2723;
   --color-text-muted: #5D4037;
   --color-text-light: #Fcfcfc;
+  /* Safe area insets for notched phones */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -31,38 +38,45 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+  min-height: 100dvh;
+  overscroll-behavior-y: none;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'DM Serif Display', serif;
+h1, h2, h3, h4, h5, h6 {
+  font-family: inherit;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
+/* Mobile-first: prevent iOS zoom on inputs */
+input, select, textarea {
+  font-size: 16px !important;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--color-bg);
+/* Touch-friendly buttons */
+button, a {
+  touch-action: manipulation;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #A1887F;
-  border-radius: 4px;
-}
+/* Scrollbar styling — hidden on mobile, visible on desktop */
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #8D6E63;
+  ::-webkit-scrollbar-track {
+    background: var(--color-bg);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #A1887F;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #8D6E63;
+  }
 }
 
 @layer components {
-  /* Coffee House Theme Components */
-
   .glass-card {
     @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl shadow-brand-brown/5 rounded-xl;
   }
@@ -71,144 +85,27 @@ h6 {
     @apply bg-white/40 backdrop-blur-lg border border-white/30 shadow-2xl rounded-3xl;
   }
 
-  .paper-card {
-    @apply bg-[#FFF8E1] border border-brand-beige/60 shadow-lg shadow-brand-brown/20 rounded-lg relative;
-  }
-
   /* Buttons */
   .btn-primary {
-    @apply bg-brand-red text-white font-semibold tracking-wide px-8 py-3 rounded-xl shadow-md shadow-brand-red/20 transition-all duration-300 hover:bg-brand-hoverRed hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-brand-red text-white font-semibold tracking-wide px-8 py-3 rounded-xl shadow-md shadow-brand-red/20 transition-all duration-300 hover:bg-brand-hoverRed hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
     @apply bg-transparent text-brand-brown font-semibold border-2 border-brand-brown/30 px-6 py-2.5 rounded-xl transition-all duration-300 hover:bg-brand-brown/10 hover:border-brand-brown active:bg-brand-brown/20;
   }
 
-  .btn-outline-light {
-    @apply bg-transparent text-white font-semibold border border-white/40 px-6 py-2 rounded-lg transition-all hover:bg-white/10 hover:border-white;
-  }
-
-  .btn-success {
-    @apply bg-emerald-700 text-white font-semibold px-6 py-2 rounded-lg shadow-sm hover:bg-emerald-800 transition-all;
-  }
-
-  .btn-danger {
-    @apply bg-red-50 text-brand-red border border-red-200 font-semibold px-4 py-2 rounded-lg hover:bg-red-100 transition-all;
-  }
-
   /* Form Elements */
   .input-field {
-    @apply w-full bg-white border-2 border-brand-brown/10 px-4 py-3 text-brand-brown placeholder-brand-brown/30 focus:outline-none focus:border-brand-brown/30 focus:bg-white transition-all rounded-xl;
-  }
-
-  /* Badges */
-  .badge {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider;
-  }
-
-  .badge-pending {
-    @apply bg-amber-100/80 text-amber-900 border border-amber-200/50 backdrop-blur-sm;
-  }
-
-  .badge-confirmed {
-    @apply bg-indigo-100/80 text-indigo-900 border border-indigo-200/50 backdrop-blur-sm;
-  }
-
-  .badge-completed {
-    @apply bg-brand-brown/5 text-brand-brown/60 border border-brand-brown/10 backdrop-blur-sm;
-  }
-
-  .badge-walkin {
-    @apply bg-purple-100/80 text-purple-900 border border-purple-200/50;
-  }
-
-  .badge-remote {
-    @apply bg-sky-100/80 text-sky-900 border border-sky-200/50;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(62, 39, 35, 0.1);
-    border-radius: 10px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(62, 39, 35, 0.2);
+    @apply w-full bg-white border-2 border-brand-brown/10 px-4 py-4 text-brand-brown placeholder-brand-brown/30 focus:outline-none focus:border-brand-brown/30 focus:bg-white transition-all rounded-2xl;
   }
 }
 
 /* Animations */
-@keyframes urgencyPulse {
-
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 0.85;
-    transform: scale(0.98);
-  }
-}
-
-.urgency-critical {
-  animation: urgencyPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes shake {
-
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-
-  20% {
-    transform: translateX(-8px);
-  }
-
-  40% {
-    transform: translateX(8px);
-  }
-
-  60% {
-    transform: translateX(-6px);
-  }
-
-  80% {
-    transform: translateX(6px);
-  }
-}
-
-.animate-shake {
-  animation: shake 0.4s ease-in-out;
-}
-
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 @keyframes fadeInUp {
   from {
     opacity: 0;
     transform: translateY(20px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -216,35 +113,53 @@ h6 {
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 @keyframes slowZoom {
-  from {
-    transform: scale(1);
-  }
-
-  to {
-    transform: scale(1.1);
-  }
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
 }
 
 @keyframes bounceSubtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
 
-  0%,
-  100% {
-    transform: translateY(0);
-  }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
-  50% {
-    transform: translateY(-3px);
-  }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes menuSlideLeft {
+  0% { opacity: 1; transform: translateX(0); }
+  40% { opacity: 0; transform: translateX(-30px); }
+  41% { transform: translateX(30px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes menuSlideRight {
+  0% { opacity: 1; transform: translateX(0); }
+  40% { opacity: 0; transform: translateX(30px); }
+  41% { transform: translateX(-30px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes menuFade {
+  0% { opacity: 1; transform: scale(1); }
+  35% { opacity: 0; transform: scale(0.96); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 .animate-slow-zoom {
@@ -259,69 +174,18 @@ h6 {
   animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-zoom-in {
+  animation: zoomIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 .animate-shimmer {
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
-}
-
-.animate-stagger-1 {
-  animation-delay: 100ms;
-}
-
-.animate-stagger-2 {
-  animation-delay: 200ms;
-}
-
-.animate-stagger-3 {
-  animation-delay: 300ms;
-}
-
-.animate-stagger-4 {
-  animation-delay: 400ms;
-}
-
-/* Café-themed decorative backgrounds */
-.bg-cafe-pattern {
-  background-color: #F5F5DC;
-  background-image:
-    radial-gradient(ellipse at 0% 100%, rgba(139, 90, 43, 0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 100% 0%, rgba(198, 40, 40, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(62, 39, 35, 0.04) 0%, transparent 60%),
-    repeating-linear-gradient(45deg,
-      transparent,
-      transparent 40px,
-      rgba(62, 39, 35, 0.015) 40px,
-      rgba(62, 39, 35, 0.015) 41px),
-    url("https://www.transparenttextures.com/patterns/cream-paper.png");
-  position: relative;
-}
-
-/* Warm decorative blobs */
-.bg-cafe-pattern::before {
-  content: '';
-  position: fixed;
-  top: -10%;
-  right: -10%;
-  width: 50vw;
-  height: 50vw;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(139, 90, 43, 0.06) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.bg-cafe-pattern::after {
-  content: '';
-  position: fixed;
-  bottom: -15%;
-  left: -10%;
-  width: 60vw;
-  height: 60vw;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(62, 39, 35, 0.05) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
 }
 
 /* Hide Scrollbar Utility */
@@ -332,4 +196,13 @@ h6 {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Safe area padding */
+.safe-top {
+  padding-top: var(--safe-top);
+}
+
+.safe-bottom {
+  padding-bottom: var(--safe-bottom);
 }

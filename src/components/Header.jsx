@@ -1,128 +1,136 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Coffee, Menu, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
+import { MENU_PDF_URL } from '../lib/constants'
+
+const LOGO_URL = '/miamor_logo.jpg'
+
+const NAV = [
+    { label: 'Home', href: '#hero' },
+    { label: 'Rooms', href: '#rooms' },
+    { label: 'Menu', href: '#menu' },
+    { label: 'Book', href: '#booking' },
+]
 
 export default function Header() {
-    const location = useLocation()
-    const navigate = useNavigate()
-    const [isScrolled, setIsScrolled] = useState(false)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+    // Lock body scroll when mobile menu open
     useEffect(() => {
-        const handleScroll = () => setIsScrolled(window.scrollY > 20)
-        window.addEventListener('scroll', handleScroll)
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [])
+        document.body.style.overflow = mobileMenuOpen ? 'hidden' : ''
+        return () => { document.body.style.overflow = '' }
+    }, [mobileMenuOpen])
 
-    const navLinks = [
-        { name: 'Utama', path: '/' },
-        { name: 'Menu', path: '/menu' },
-    ]
+    const closeMenu = () => setMobileMenuOpen(false)
 
     return (
-        <header
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
-                ? 'bg-brand-brown/95 backdrop-blur-md shadow-lg py-3'
-                : 'bg-transparent py-5'
-                }`}
-        >
-            <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-
-                {/* Logo */}
-                <Link to="/" className="flex items-center gap-3 group">
-                    <div className={`p-2 rounded-full transition-all duration-300 ${isScrolled ? 'bg-white/10' : 'bg-brand-brown/80'}`}>
-                        <Coffee className="w-6 h-6 text-brand-beige" />
-                    </div>
-                    <div className="flex flex-col">
-                        <h1 className={`font-brand font-bold text-xl tracking-[0.15em] transition-colors ${isScrolled ? 'text-white' : 'text-brand-brown'} group-hover:text-brand-red`}>
-                            MIAMOR
-                        </h1>
-                        <span className={`text-[10px] uppercase tracking-[0.2em] font-bold ${isScrolled ? 'text-brand-beige' : 'text-brand-lightBrown'}`}>
-                            Coffee House
+        <>
+            <header className="fixed top-0 left-0 right-0 z-50 bg-brand-brown shadow-md safe-top">
+                <div className="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between py-3 md:py-4">
+                    <a href="#hero" onClick={closeMenu} className="flex items-center gap-3 group">
+                        <div className="w-14 h-14 rounded-full overflow-hidden flex-shrink-0">
+                            <img
+                                src={LOGO_URL}
+                                alt="Miamor Coffee House logo"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                        <span className="hidden sm:flex flex-col font-logo font-bold tracking-tight leading-none justify-center">
+                            <span className="text-3xl text-brand-red">MIAMOR</span>
+                            <span className="text-sm mt-0.5 text-white">COFFEE HOUSE</span>
                         </span>
-                    </div>
-                </Link>
+                    </a>
 
-                {/* Desktop Nav */}
-                <nav className="hidden md:flex items-center gap-8">
-                    {navLinks.map((link) => (
-                        <Link
-                            key={link.path}
-                            to={link.path}
-                            className={`font-semibold text-sm uppercase tracking-wider hover:text-brand-red transition-colors relative group
-                ${location.pathname === link.path
-                                    ? 'text-brand-red'
-                                    : isScrolled ? 'text-white' : 'text-brand-brown'
-                                }`}
+                    <nav className="hidden md:flex items-center gap-8">
+                        {NAV.map(({ label, href }) => (
+                            <a
+                                key={href}
+                                href={href}
+                                className="font-semibold text-sm uppercase tracking-wider text-white hover:text-brand-red transition-colors relative group"
+                            >
+                                {label}
+                                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-red transition-all duration-300 group-hover:w-full" />
+                            </a>
+                        ))}
+                        <a
+                            href={MENU_PDF_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-semibold text-sm uppercase tracking-wider text-white hover:text-brand-red transition-colors relative group"
                         >
-                            {link.name}
-                            <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-red transition-all duration-300 group-hover:w-full ${location.pathname === link.path ? 'w-full' : ''}`} />
-                        </Link>
-                    ))}
-
-                    {/* Staff link */}
-                    <Link
-                        to="/staff/login"
-                        className={`font-semibold text-sm uppercase tracking-wider hover:text-brand-red transition-colors relative group
-                            ${location.pathname.startsWith('/staff')
-                                ? 'text-brand-red'
-                                : isScrolled ? 'text-white/60 hover:text-white' : 'text-brand-brown/50 hover:text-brand-brown'
-                            }`}
-                    >
-                        Kakitangan
-                        <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-red transition-all duration-300 group-hover:w-full ${location.pathname.startsWith('/staff') ? 'w-full' : ''}`} />
-                    </Link>
+                            Menu
+                            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-red transition-all duration-300 group-hover:w-full" />
+                        </a>
+                        <a
+                            href="#booking"
+                            className="px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 active:scale-95 bg-brand-red text-white hover:bg-brand-hoverRed"
+                        >
+                            Book a Table
+                        </a>
+                    </nav>
 
                     <button
-                        onClick={() => navigate('/book')}
-                        className={`px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 ${location.pathname === '/book'
-                            ? 'bg-brand-red text-white'
-                            : 'bg-brand-brown text-white hover:bg-brand-lightBrown'
-                            }`}
+                        className="md:hidden p-2.5 -mr-2 text-white"
+                        onClick={() => setMobileMenuOpen(o => !o)}
+                        aria-label="Toggle menu"
                     >
-                        Tempah Meja
-                    </button>
-                </nav>
-
-                {/* Mobile Menu Button */}
-                <button
-                    className="md:hidden p-2"
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    aria-label="Toggle menu"
-                >
-                    {mobileMenuOpen ? <X className={isScrolled ? 'text-white' : 'text-brand-brown'} /> : <Menu className={isScrolled ? 'text-white' : 'text-brand-brown'} />}
-                </button>
-            </div>
-
-            {/* Mobile Menu Overlay */}
-            {mobileMenuOpen && (
-                <div className="md:hidden absolute top-full left-0 right-0 bg-brand-brown shadow-xl border-t border-white/10 p-6 flex flex-col gap-4 animate-slide-up">
-                    {navLinks.map((link) => (
-                        <Link
-                            key={link.path}
-                            to={link.path}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className={`text-lg font-brand font-bold tracking-wide ${location.pathname === link.path ? 'text-brand-red' : 'text-brand-beige'
-                                }`}
-                        >
-                            {link.name}
-                        </Link>
-                    ))}
-                    <Link
-                        to="/staff/login"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="text-lg font-brand font-bold tracking-wide text-brand-beige/50"
-                    >
-                        Kakitangan
-                    </Link>
-                    <button
-                        onClick={() => { setMobileMenuOpen(false); navigate('/book') }}
-                        className="mt-2 bg-brand-red text-white px-6 py-3 rounded-full font-bold text-sm tracking-wide"
-                    >
-                        Tempah Meja
+                        {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                     </button>
                 </div>
+            </header>
+
+            {mobileMenuOpen && (
+                <div className="fixed inset-0 z-[60] md:hidden animate-fade-in">
+                    <div className="absolute inset-0 bg-brand-brown" />
+                    <div className="relative flex flex-col items-center justify-center min-h-screen px-8 gap-6">
+                        <button
+                            onClick={closeMenu}
+                            className="absolute top-5 right-5 p-3 text-white/70 hover:text-white"
+                            aria-label="Close menu"
+                        >
+                            <X className="w-7 h-7" />
+                        </button>
+
+                        <div className="text-center mb-2">
+                            <div className="w-24 h-24 mx-auto mb-3 rounded-full overflow-hidden">
+                                <img src={LOGO_URL} alt="Miamor Coffee House logo" className="w-full h-full object-cover" />
+                            </div>
+                            <p className="font-logo font-bold flex flex-col tracking-tight leading-none">
+                                <span className="text-5xl text-brand-red">MIAMOR</span>
+                                <span className="text-base mt-1 text-white">COFFEE HOUSE</span>
+                            </p>
+                        </div>
+
+                        {NAV.map(({ label, href }) => (
+                            <a
+                                key={href}
+                                href={href}
+                                onClick={closeMenu}
+                                className="text-2xl font-sans font-bold tracking-wide text-brand-beige hover:text-white transition-colors"
+                            >
+                                {label}
+                            </a>
+                        ))}
+
+                        <a
+                            href={MENU_PDF_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={closeMenu}
+                            className="text-2xl font-sans font-bold tracking-wide text-brand-beige hover:text-white transition-colors"
+                        >
+                            Menu
+                        </a>
+
+                        <a
+                            href="#booking"
+                            onClick={closeMenu}
+                            className="mt-4 bg-brand-red text-white px-10 py-4 rounded-full font-bold text-lg tracking-wide shadow-2xl shadow-brand-red/30 active:scale-95 transition-transform w-full max-w-xs text-center"
+                        >
+                            Book a Table
+                        </a>
+                    </div>
+                </div>
             )}
-        </header>
+        </>
     )
 }

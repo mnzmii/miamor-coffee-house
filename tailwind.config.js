@@ -32,10 +32,13 @@ export default {
             },
             fontFamily: {
                 sans: ['Inter', 'system-ui', 'sans-serif'],
-                body: ['Cormorant Garamond', 'Georgia', 'serif'],
-                serif: ['DM Serif Display', 'Georgia', 'serif'],
-                display: ['DM Serif Display', 'serif'],
+                body: ['Inter', 'system-ui', 'sans-serif'],
+                serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+                display: ['Cormorant Garamond', 'serif'],
                 brand: ['Playfair Display', 'Georgia', 'serif'],
+                logo: ['Oswald', '"Arial Black"', '"Helvetica Neue"', 'sans-serif'],
+                accent: ['DM Serif Display', 'Georgia', 'serif'],
+                heading: ['Cormorant Garamond', 'Georgia', 'serif'],
             },
             backgroundImage: {
                 'coffee-pattern': "url('https://www.transparenttextures.com/patterns/black-linen.png')",
