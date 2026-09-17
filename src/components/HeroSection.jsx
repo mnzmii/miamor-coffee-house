@@ -9,7 +9,7 @@ export default function HeroSection() {
                 <img
                     src="/miamor_hero.jpg"
                     alt="Suasana Miamor Coffee House"
-                    className="w-full h-full object-cover object-center"
+                    className="w-full h-full object-cover object-[72%_center] md:object-center"
                 />
                 {/* Gradient: Gelap di kiri (untuk teks), lutsinar di kanan (untuk cawan kopi) */}
                 <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/90 md:from-black/80 via-black/50 to-transparent" />
@@ -36,12 +36,12 @@ export default function HeroSection() {
                     </h1>
 
                     {/* Description — below headline */}
-                    <p className="text-base md:text-lg text-white/95 leading-relaxed font-heading italic drop-shadow-md">
+                    <p className="text-xl md:text-2xl text-white leading-relaxed font-heading drop-shadow-md">
                         A cozy space where premium coffee is brewed with love. Reserve a private room for your perfect moment.
                     </p>
 
                     {/* Action Buttons — bottom of content group */}
-                    <div className="flex flex-col sm:flex-row items-center justify-start gap-3 md:gap-4 w-full sm:w-auto mt-2">
+                    <div className="flex flex-col sm:flex-row items-center justify-start gap-3 md:gap-4 w-full sm:w-auto mt-8 md:mt-2">
                         <a
                             href="#booking"
                             className="group w-full sm:w-auto px-8 py-4 bg-brand-red text-white font-sans font-bold text-base md:text-lg rounded-full shadow-lg shadow-brand-red/30 transition-all active:scale-95 tracking-wide flex items-center justify-center gap-2"

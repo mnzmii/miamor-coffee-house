@@ -27,7 +27,7 @@ export default function Footer() {
                     </div>
 
                     <div>
-                        <h4 className="font-heading font-semibold text-white uppercase tracking-wider text-sm mb-5">Quick Links</h4>
+                        <h4 className="font-sans font-bold text-brand-beige uppercase tracking-[0.2em] text-xs mb-5">Quick Links</h4>
                         <ul className="space-y-3 text-sm font-medium">
                             <li><a href="#hero" className="text-brand-beige/60 hover:text-white transition-colors">Home</a></li>
                             <li><a href="#rooms" className="text-brand-beige/60 hover:text-white transition-colors">Rooms</a></li>
@@ -38,7 +38,7 @@ export default function Footer() {
                     </div>
 
                     <div>
-                        <h4 className="font-heading font-semibold text-white uppercase tracking-wider text-sm mb-5">Opening Hours</h4>
+                        <h4 className="font-sans font-bold text-brand-beige uppercase tracking-[0.2em] text-xs mb-5">Opening Hours</h4>
                         <ul className="space-y-3 text-sm">
                             <li className="flex items-start gap-3">
                                 <Clock className="w-4 h-4 text-brand-red mt-0.5 flex-shrink-0" />
@@ -58,7 +58,7 @@ export default function Footer() {
                     </div>
 
                     <div>
-                        <h4 className="font-heading font-semibold text-white uppercase tracking-wider text-sm mb-5">Contact</h4>
+                        <h4 className="font-sans font-bold text-brand-beige uppercase tracking-[0.2em] text-xs mb-5">Contact</h4>
                         <ul className="space-y-3 text-sm">
                             <li className="flex items-start gap-3">
                                 <MapPin className="w-4 h-4 text-brand-red mt-0.5 flex-shrink-0" />
