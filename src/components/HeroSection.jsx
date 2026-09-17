@@ -1,5 +1,4 @@
 import { ChevronRight } from 'lucide-react'
-import { MENU_PDF_URL } from '../lib/constants'
 
 export default function HeroSection() {
     return (
@@ -51,9 +50,7 @@ export default function HeroSection() {
                         </a>
 
                         <a
-                            href={MENU_PDF_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            href="#menu"
                             className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-md border border-white/30 text-white font-sans font-bold text-base md:text-lg rounded-full hover:bg-white/20 transition-all tracking-wide text-center active:scale-95"
                         >
                             View Menu
