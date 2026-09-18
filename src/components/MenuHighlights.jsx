@@ -162,7 +162,7 @@ export default function MenuHighlights() {
                     <button
                         onClick={goPrevPage}
                         disabled={page === 0}
-                        className="absolute -left-2 md:left-0 top-0 bottom-0 z-20 w-10 md:w-14 flex items-center justify-center text-white/60 hover:text-white transition-all disabled:opacity-0 disabled:pointer-events-none"
+                        className="absolute -left-2 md:left-0 top-0 bottom-0 z-20 w-10 md:w-14 hidden md:flex items-center justify-center text-white/60 hover:text-white transition-all disabled:opacity-0 disabled:pointer-events-none"
                     >
                         <ChevronLeft className="w-7 h-7 md:w-9 md:h-9" />
                     </button>
@@ -171,7 +171,7 @@ export default function MenuHighlights() {
                     <button
                         onClick={nextPage}
                         disabled={page === totalPages - 1}
-                        className="absolute -right-2 md:right-0 top-0 bottom-0 z-20 w-10 md:w-14 flex items-center justify-center text-white/60 hover:text-white transition-all disabled:opacity-0 disabled:pointer-events-none"
+                        className="absolute -right-2 md:right-0 top-0 bottom-0 z-20 w-10 md:w-14 hidden md:flex items-center justify-center text-white/60 hover:text-white transition-all disabled:opacity-0 disabled:pointer-events-none"
                     >
                         <ChevronRight className="w-7 h-7 md:w-9 md:h-9" />
                     </button>
@@ -232,9 +232,9 @@ export default function MenuHighlights() {
                 </div>
             </div>
 
-            {/* Dots */}
+            {/* Dots (desktop) */}
             {totalPages > 1 && (
-                <div className="mt-8 flex justify-center gap-2">
+                <div className="mt-8 hidden md:flex justify-center gap-2">
                     {Array.from({ length: totalPages }, (_, i) => (
                         <button
                             key={i}
@@ -244,6 +244,40 @@ export default function MenuHighlights() {
                             }`}
                         />
                     ))}
+                </div>
+            )}
+
+            {/* Pagination bar (mobile): prev + dots + next */}
+            {totalPages > 1 && (
+                <div className="mt-6 flex md:hidden items-center justify-center gap-4">
+                    <button
+                        onClick={goPrevPage}
+                        disabled={page === 0}
+                        aria-label="Previous page"
+                        className="w-11 h-11 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-white active:scale-90 transition-all disabled:opacity-30 disabled:pointer-events-none"
+                    >
+                        <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <div className="flex items-center gap-2">
+                        {Array.from({ length: totalPages }, (_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => goToPage(i)}
+                                aria-label={`Go to page ${i + 1}`}
+                                className={`h-2 rounded-full transition-all duration-300 ${
+                                    i === page ? 'bg-brand-red w-8' : 'bg-white/20 w-2'
+                                }`}
+                            />
+                        ))}
+                    </div>
+                    <button
+                        onClick={nextPage}
+                        disabled={page === totalPages - 1}
+                        aria-label="Next page"
+                        className="w-11 h-11 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-white active:scale-90 transition-all disabled:opacity-30 disabled:pointer-events-none"
+                    >
+                        <ChevronRight className="w-5 h-5" />
+                    </button>
                 </div>
             )}
 
