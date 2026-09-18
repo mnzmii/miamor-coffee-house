@@ -4,7 +4,6 @@ import HeroSection from '../components/HeroSection'
 import Footer from '../components/Footer'
 import RoomCarousel from '../components/RoomCarousel'
 import BookingSection from '../components/BookingSection'
-import FloatingWhatsApp from '../components/FloatingWhatsApp'
 import TikTokDecoSection from '../components/TikTokDecoSection'
 import MenuHighlights from '../components/MenuHighlights'
 import { MENU_PDF_URL } from '../lib/constants'
@@ -275,7 +274,6 @@ export default function LandingPage() {
             </section>
 
             <Footer />
-            <FloatingWhatsApp />
         </div>
     )
 }

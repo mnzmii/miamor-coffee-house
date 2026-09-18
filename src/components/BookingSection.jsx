@@ -11,7 +11,7 @@ export default function BookingSection() {
             {/* Background image + overlay */}
             <div className="absolute inset-0">
                 <img
-                    src="/miamor_hero.jpg"
+                    src="/miamor_hero.png"
                     alt=""
                     aria-hidden="true"
                     className="w-full h-full object-cover opacity-30"

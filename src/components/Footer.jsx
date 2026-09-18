@@ -47,11 +47,11 @@ export default function Footer() {
                                     <p className="text-brand-beige/60">10:30 AM – 6:30 PM</p>
                                 </div>
                             </li>
-                            <li className="flex items-start justify-center md:justify-start gap-3 opacity-50">
-                                <Clock className="w-4 h-4 text-brand-beige/20 mt-0.5 flex-shrink-0" />
+                            <li className="flex items-start justify-center md:justify-start gap-3 opacity-80">
+                                <Clock className="w-4 h-4 text-brand-beige/40 mt-0.5 flex-shrink-0" />
                                 <div className="text-center md:text-left">
-                                    <p className="text-brand-beige/40 font-medium">Sunday</p>
-                                    <p className="text-brand-beige/30 italic">Closed</p>
+                                    <p className="text-brand-beige/60 font-medium">Sunday</p>
+                                    <p className="text-brand-beige/50 italic">Closed</p>
                                 </div>
                             </li>
                         </ul>

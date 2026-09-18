@@ -6,7 +6,7 @@ export default function HeroSection() {
             {/* Background Image & Overlay */}
             <div className="absolute inset-0 z-0">
                 <img
-                    src="/miamor_hero.jpg"
+                    src="/miamor_hero.png"
                     alt="Suasana Miamor Coffee House"
                     className="w-full h-full object-cover object-[72%_center] md:object-center"
                 />
